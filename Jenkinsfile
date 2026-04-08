@@ -3,6 +3,7 @@ pipeline {
 
     environment {
         AWS_DEFAULT_REGION = 'us-east-1'
+        CLUSTER_NAME = 'heartfelt-bee-7l0iha'
     }
 
     stages {
@@ -33,7 +34,7 @@ pipeline {
                     echo "Revision: $TD_REVISION"
 
                     aws ecs update-service \
-                        --cluster heartfelt-bee-7l0iha \
+                        --cluster $CLUSTER_NAME \
                         --service learnapp-TaskDefinition-prod-service-hsylsait \
                         --task-definition learnapp-TaskDefinition-prod:$TD_REVISION \
                         --force-new-deployment
