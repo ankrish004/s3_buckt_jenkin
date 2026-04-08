@@ -1,7 +1,30 @@
-FROM amazonlinux:2
+FROM amazonlinux:2023
 
-RUN yum update -y
-RUN amazon-linux-extras install docker -y
-RUN yum install jq -y
+# Install required packages
+RUN yum update -y && \
+    yum install -y \
+        unzip \
+        curl \
+        jq \
+        tar \
+        gzip \
+        shadow-utils \
+        docker && \
+    yum clean all
 
-RUN yum install -y aws-cli
+# Install AWS CLI v2
+RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip" && \
+    unzip awscliv2.zip && \
+    ./aws/install && \
+    rm -rf aws awscliv2.zip
+
+# Verify installations
+RUN aws --version && \
+    docker --version && \
+    jq --version
+
+# Set working directory
+WORKDIR /workspace
+
+# Default command
+CMD ["bash"]
