@@ -17,13 +17,13 @@ pipeline {
                 withCredentials([usernamePassword(credentialsId: 'aws-id', passwordVariable: 'AWS_SECRET_ACCESS_KEY', usernameVariable: 'AWS_ACCESS_KEY_ID')]) {
                 sh '''
                 aws --version
-                echo "hello world" >> index.html
-                aws s3 cp test.txt s3://$AWS_S3_BUCKET/test.txt
-                aws s3 ls
+                aws ecs register-task-definition \
+                    --cli-input-json file://aws/task-define.json
+      
                 '''   
                 }
-
             }
+            steps 
         }
 
     }
