@@ -4,6 +4,8 @@ pipeline {
     environment {
         AWS_DEFAULT_REGION = 'us-east-1'
         CLUSTER_NAME = 'heartfelt-bee-7l0iha'
+        REACT_APP_VERSION = "1.0.$BUILD_ID"
+        APP_NAME = 'newjenkinapp'
     }
 
     stages {
@@ -27,7 +29,7 @@ pipeline {
         
         stage('docker image build') {
             steps {
-                sh 'docker build -t newjenkinapp:26 .'
+                sh 'docker build -t $APP_NAME:$REACT_APP_VERSION .'
             }
         }
         
