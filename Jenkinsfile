@@ -30,7 +30,7 @@ pipeline {
         stage('aws-cli cutom build') {
             steps {
                 sh'''
-                    docker build -f ci\Dockerfile -t my-aws-cli .
+                    docker build -f ci/Dockerfile -t my-aws-cli .
                 '''
             }
         }
