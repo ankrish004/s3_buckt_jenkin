@@ -27,7 +27,7 @@ pipeline {
         
         stage('docker image build') {
             steps {
-                sh 'docker build -t newJenkinapp:26 .'
+                sh 'docker build -t newjenkinapp:26 .'
             }
         }
         
