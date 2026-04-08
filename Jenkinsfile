@@ -26,20 +26,20 @@ pipeline {
                 npm run build
                 '''
             }
-        }
+        }/* 
         stage('aws-cli cutom build') {
             steps {
                 sh'''
                     docker build -f ci/Dockerfile -t my-aws-cli .
                 '''
             }
-        }
+        }*/
         
         stage('App image build') {
             agent {
                 docker {
-                    image 'my-aws-cli'
-                    args "-u root --entrypoint=''"
+                    image 'amazon/aws-cli:2.34.27'
+                    args "-u root -v /var/run/docker.sock:/var/run/docker.sock --entrypoint=''"
                 }
             }
             steps {
@@ -55,8 +55,8 @@ pipeline {
         stage('AWS-cli') {
             agent {
                 docker {
-                    image 'my-aws-cli'
-                    args "-u root --entrypoint=''"
+                    image 'amazon/aws-cli:2.34.27'
+                    args "-u root -v /var/run/docker.sock:/var/run/docker.sock --entrypoint=''"
                 }
             }
 
