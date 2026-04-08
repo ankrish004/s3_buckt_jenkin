@@ -10,7 +10,7 @@ pipeline {
     }
 
     stages {
-        /* *
+        
         stage('BUILD') {
             agent {
                 docker {
@@ -26,7 +26,7 @@ pipeline {
                 npm run build
                 '''
             }
-        }*/
+        }
         stage('aws-cli cutom build') {
             steps {
                 sh'''
@@ -43,11 +43,20 @@ pipeline {
                 }
             }
             steps {
-                sh'''
+                withCredentials([
+                    usernamePassword(
+                        credentialsId: 'aws-id',
+                        usernameVariable: 'AWS_ACCESS_KEY_ID',
+                        passwordVariable: 'AWS_SECRET_ACCESS_KEY'
+                    )
+                ])
+
+                {sh'''
                 docker build -t $AWS_REG/$APP_NAME:$REACT_APP_VERSION .
                 aws ecr get-login-password | docker login --username AWS --password-stdin $AWS_REG
                 docker push $AWS_REG/$APP_NAME:$REACT_APP_VERSION
                 '''
+                }
             }
         }
         
