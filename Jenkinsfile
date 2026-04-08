@@ -20,7 +20,11 @@ pipeline {
  
                 aws ecs register-task-definition \
                     --cli-input-json file://aws/task-define.json
-                aws --version
+
+                aws ecs update-service \
+                    --cluster heartfelt-bee-7l0iha \
+                    --service learnapp-TaskDefinition-prod-service-hsylsait \
+                    --task-definition learnapp-TaskDefinition-prod:2
       
                 '''   
                 }
