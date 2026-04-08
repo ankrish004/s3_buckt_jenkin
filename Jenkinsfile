@@ -6,6 +6,7 @@ pipeline {
         CLUSTER_NAME = 'heartfelt-bee-7l0iha'
         REACT_APP_VERSION = "1.0.$BUILD_ID"
         APP_NAME = 'newjenkinapp'
+        AWS_REG = '262835400983.dkr.ecr.us-east-1.amazonaws.com'
     }
 
     stages {
@@ -28,12 +29,22 @@ pipeline {
         }
         
         stage('docker image build') {
+            agent {
+                docker {
+                    image 'amazon/aws-cli:2.34.26'
+                    args "-u root --entrypoint=''"
+                }
+            }
             steps {
-                sh 'docker build -t $APP_NAME:$REACT_APP_VERSION .'
+                sh'''
+                docker build -t $AWS_REG/$APP_NAME:$REACT_APP_VERSION .
+                aws ecr get-login-password | docker login --username AWS --password-stdin $AWS_REG
+                docker push $AWS_REG/$APP_NAME:$REACT_APP_VERSION
+                '''
             }
         }
         
-        /* 
+        
         stage('AWS-cli') {
             agent {
                 docker {
@@ -67,6 +78,6 @@ pipeline {
                     '''
                 }
             }
-        }*/
+        }
     }
 }
